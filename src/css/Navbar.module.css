@@ -1,0 +1,11 @@
+.navbar {
+  color: blue;
+  font-size: 20px;
+  padding: 10px;
+}
+
+.navbar2 {
+  color: rgb(0, 17, 252);
+  text-decoration: underline;
+  margin-right: 10px;
+}
