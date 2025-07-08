@@ -1,106 +1,89 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+// import { useNavigate } from "react-router-dom";
 // import { toast } from "react-toastify";
 
 
 const Signup = () => {
-  const [userName, setUserName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
-  const navigate = useNavigate();
-
-  const handleSignup = (e)=>{
-    e.preventDefault();
-
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    
-    const existenUser = users.find((user) =>
-      user.userName === userName ||
-      user.email === email ||
-      user.password === password
-    );
-
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-    if(password === confirmPassword){
-      if (!passwordRegex.test(password)) {
-        alert('Password` must be at least 8 characters and include uppercase, lowercase, number, and special character.');
-        return;
-      }
-      if(existenUser){
-        alert('User already exist');
-        setTimeout(()=>{
-          navigate('/');
-        }, 3000);
-      } else {
-      const newUser = {userName, email, password};
-        alert('User created successfully');
-        setTimeout(()=>{
-          users.push(newUser)
-          localStorage.setItem('users', JSON.stringify(users));
-          navigate('/dasboard');
-        }, 3000)
-      }
-    } else{
-      const errMsg = document.getElementById('errMsg');
-      errMsg.innerHTML = 'Password and Confirm Password must match';
-      setTimeout(()=>{
-        errMsg.innerHTML = '';
-      }, 3000);
+  const formik = useFormik({
+    initialValues: {
+      userName: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    },
+    validationSchema: Yup.object({
+      userName: Yup.string().required("Required"),
+      email: Yup.string().email("Invalid email format").required("Required"),
+      password: Yup.string().min(8, "Password must be at least 8 characters").required("Required"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password'), null], "Passwords must match")
+        .required("Required")
+    }),
+    onSubmit: values => {
+      console.log(values);
     }
-  };
+  });
 
   return (
     <div className="justify-center items-center w-full h-screen bg-stone-950 bg-contain">
       <div className="flex flex-col justify-center items-center bg-amber-950 w-full h-full border-amber-500 border-dotted border-5 rounded-4xl">
+        <h1 className="text-9xl font-bold text-center italic text-blue-500 underline decoration-wavy decoration-red-500 decoration-1 uppercase">
+          Signup
+        </h1>
         <form
-          onSubmit={handleSignup}
+          onSubmit={formik.handleSubmit}
           action=""
           method="post"
           className="flex flex-col justify-center items-center gap-3"
         >
-          <h1 className="text-9xl font-bold text-center italic text-blue-500 underline decoration-wavy decoration-red-500 decoration-1 uppercase">
-            Signup
-          </h1>
           <br />
           <input
             type="text"
             placeholder="userName"
             name="userName"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
+            value={formik.values.userName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="rounded-3xl justify-center bg-amber-50 font-extrabold p-2 hover:bg-neutral-950 border-pink-500 hover:border-dotted border-3"
-            required
-          />
+            />
+            {formik.touched.userName && formik.errors.userName && (
+              <span style={{ color: "red" }}>{formik.errors.userName}</span>
+            )}
           <input
             type="email"
             placeholder="email"
             name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="rounded-3xl justify-center bg-amber-50 font-extrabold p-2 hover:bg-neutral-950 border-pink-500 hover:border-dotted border-3"
-            required
           />
+          {formik.touched.email && formik.errors.email && (
+            <span style={{ color: "red" }}>{formik.errors.email}</span>
+          )}
           <input
             type="password"
             placeholder="password"
             name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="rounded-3xl justify-center bg-amber-50 font-extrabold p-2 hover:bg-neutral-950 border-pink-500 hover:border-dotted border-3"
-            required
           />
           <input
             type="password"
             placeholder="confirm your password"
             name="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={formik.values.confirmPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="rounded-3xl justify-center bg-amber-50 font-extrabold p-2 hover:bg-neutral-950 border-pink-500 hover:border-dotted border-3"
-            required
           />
-          <p id="errMsg"></p>
+          {formik.touched.password && formik.errors.password && (
+            <span style={{ color: "red" }}>{formik.errors.password}</span>
+          )}
           <p>
             password must be at least 8 characters and include uppercase,
             lowercase, number, and special character.
