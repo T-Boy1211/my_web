@@ -8,6 +8,8 @@ import Profile from "./pages/Profile";
 import Product from "./pages/Product";
 import NotFound from "./pages/NotFound";
 import API from "./components/API";
+import Buttons from "./pages/Buttons";
+import Prop from "./pages/Prop";
 
 const App = () => {
   return (
@@ -19,6 +21,8 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/formik" element={<Formik />} />
         <Route path="/product" element={<Product />} />
+        <Route path="/button" element={<Buttons />} />
+        <Route path="/prop" element={<Prop />} />
         <Route path="/api" element={<API />} />
         <Route path="/:username" element={<Profile />} />
         <Route path="*" element={<NotFound />} />

@@ -128,9 +128,7 @@ const Product = () => {
             <h2 className="font-bold text-lg">{product.name}</h2>
             <p className="text-sm text-green-700">₦{product.price}</p>
             <p className="text-gray-600">{product.description}</p>
-            <p className="text-xs text-gray-400">
-              Category: {product.category}
-            </p>
+            <p className="text-xs text-gray-400">{product.category}</p>
             <ul className="list-disc text-sm mt-2 pl-4">
               {product.features.map((feature, i) => (
                 <li key={i}>{feature}</li>
@@ -143,7 +141,7 @@ const Product = () => {
               Delete
             </button>
           </div>
-        ))}
+        ))} 
       </div>
     </div>
   );
